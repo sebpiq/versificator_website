@@ -14,13 +14,34 @@
         <canvas id="sketch"></canvas>
         <script>
             var pickImageUrl = function() {
-                return 'images/' + (1 + Math.floor(Math.random() * 18)) + '.png';
+                if (_imageInds.length === 0) {
+                    for (var i = 1; i < IMG_BANK_SIZE + 1; i++) _imageInds.push(i);
+                    randomizeArray(_imageInds);
+                } 
+                return 'images/' + _imageInds.pop() + '.png';
+            }, _imageInds = [];
+
+            var randomizeArray = function (myArray) {
+                var i = myArray.length;
+                if (i === 0) return false;
+                while (--i) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var tempi = myArray[i];
+                    var tempj = myArray[j];
+                    myArray[i] = tempj;
+                    myArray[j] = tempi;
+                }
             };
 
             var sketch = new Processing(document.getElementById('sketch')),
+                ww = window.innerWidth, wh = window.innerHeight,
+                last_position = {x: ww / 2, y: wh / 2},
                 TILT_NUM = 5, // number of times image tilt between 2 beats
                 TILT_MAX = Math.PI / 6,
-                TILT_STEP = TILT_MAX * 0.05;
+                TILT_STEP = TILT_MAX * 0.05,
+                IMG_BANK_SIZE = 18,
+                IMG_STEP = 0.5,
+                IMG_MAX = 50;
 
             var ImageAttrs = {
                 x: 500,
@@ -38,7 +59,7 @@
                     this.sketch.pushMatrix();
                     this.sketch.translate(this.x, this.y);
                     this.sketch.rotate(this.angle);
-                    this.sketch.image(this, - this.width / 2, - this.height / 2);
+                    this.sketch.image(this, - this.width / 2, - this.height / 2, this.width / 2, this.height / 2);
                     this.sketch.popMatrix();
                 }
             };
@@ -47,7 +68,7 @@
                 images: [],
 
                 setup: function() {
-                    this.size(window.innerWidth, window.innerHeight);
+                    this.size(ww, wh);
                     this.background(255);
                     this.setTempo(60);
                 },
@@ -64,12 +85,22 @@
 
                 getNewImage: function() {
                     var newImg = this.requestImage(pickImageUrl());
-                    $.extend(newImg, ImageAttrs, {x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight});
+                    last_position.x += Math.random() * ww * IMG_STEP - ww * IMG_STEP / 2;
+                    last_position.x = Math.min(last_position.x, ww);
+                    last_position.x = Math.max(last_position.x, 0);
+                    last_position.y += Math.random() * wh * IMG_STEP - wh * IMG_STEP / 2;
+                    last_position.y = Math.min(last_position.y, wh);
+                    last_position.y = Math.max(last_position.y, 0);
+
+                    $.extend(newImg, ImageAttrs, {
+                        x: last_position.x,
+                        y: last_position.y
+                    });
                     this.images.push(newImg);
+                    if (this.images.length > IMG_MAX) this.images.splice(0, 1);
                 },
 
                 setTempo: function(bpm) {
-                    console.log(bpm * TILT_NUM / 60);
                     this.frameRate(bpm * TILT_NUM / 60);
                 }
             });
