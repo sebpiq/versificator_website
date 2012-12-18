@@ -11,9 +11,82 @@
     </head>
 
     <body>
+        <!-- Facebook like button -->
+        <div id="fb-root"></div>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
         <audio autoplay="autoplay" src="http://versificator.fm:8000/versificator.ogg"></audio>
         <!--<button onclick="sketch.noLoop();">stop</button>
         <button onclick="sketch.loop();">start</button>-->
+        <div id="showFooter">?</div>
+        <div id="footer">
+            <div id="footerBody">
+                <div id="about">
+                    The <b>versificator</b> is a machine foreseen by George Orwell.</br>
+                    It is designed to replace electronic musicians.</br>
+                    It is way more productive than a human, cheaper, and never gets tired.</br>
+                    It can create new music over and over again, never repeating itself, yielding infinite variations of electronic beats.</br>
+                    If you're a developer, you can serve its evil purpose by improving it (github on the right corner).</br>
+                </div>
+                <div id="credits">CREDITS</div>
+            </div>
+            <div id="menu">
+                <ul>
+                    <li><a id="showAbout" href="">About&nbsp;&nbsp;/</a></li>
+                    <li><a id="showCredits" href="">Credits&nbsp;&nbsp;//</a></li>
+                </ul>
+                <div id="socialNetworks">
+                    <div id="facebookButton">
+                        <div class="fb-like" data-href="http://versificator.fm" data-send="false"
+                            data-layout="button_count" data-width="450" data-show-faces="false"></div>
+                    </div>
+                    <div id="twitterButton">
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-via="twitterapi" data-lang="en">Tweet</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    </div>
+                    <div id="gitHubButton">
+                        <iframe src="http://ghbtns.com/github-btn.html?user=sebpiq&repo=versificator&type=watch&count=true"
+                            allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <script>
+            $(function() {
+                $('#showFooter').hover(function() {
+                    $(this).hide();
+                    $('#footer').show().addClass('expanded');
+                });
+                $('canvas').mouseover(function() {
+                    $('#footer').hide().removeClass('expanded');
+                    $('#footerBody').css({height: 0}).removeClass('expanded');
+                    $('#showFooter').show();
+                });
+                $('#showAbout, #showCredits').click(function() {
+                    if (!$('#footerBody').hasClass('expanded')) {
+                        $('#footerBody').addClass('expanded').animate({height: 100}, 100);
+                    }
+                });
+                $('#showAbout').click(function(event) {
+                    event.preventDefault();
+                    $('#credits').hide();
+                    $('#about').show();
+                });
+                $('#showCredits').click(function(event) {
+                    event.preventDefault();
+                    $('#credits').show();
+                    $('#about').hide();
+                });
+            });
+        </script>
+
         <canvas id="sketch"></canvas>
         <script>
             var getImageUrls = function() {
@@ -84,11 +157,16 @@
                         {x: this.x + rw / 2, y: this.y - rh / 2},
                         // center
                         {x: this.x, y: this.y},
+                        // interpolated, sides middle
+                        {x: this.x - rw / 2, y: this.y},
+                        {x: this.x + rw / 2, y: this.y},
+                        {x: this.x, y: this.y + rh / 2},
+                        {x: this.x, y: this.y - rh / 2},
                         // interpolated
                         {x: this.x - rw, y: this.y},
                         {x: this.x + rw, y: this.y},
                         {x: this.x, y: this.y + rh},
-                        {x: this.x, y: this.y - rh},
+                        {x: this.x, y: this.y - rh}
                     ]
                 }
 
@@ -110,7 +188,7 @@
                     this.size(ww, wh);
                     this.background(255);
                     this.setTempo(60);
-                    this.stroke(200);
+                    this.stroke(210);
                 },
         
                 draw: function() {
@@ -144,6 +222,7 @@
                     // Fill-up `imagesShuffled` if empty
                     if (this.imagesShuffled.length === 0) {
                         this.imagesShuffled = this.imageBank.slice(0);
+                        randomizeArray(this.imagesShuffled);
                         randomizeArray(this.imagesShuffled);
                     }
 
