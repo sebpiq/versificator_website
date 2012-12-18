@@ -133,10 +133,11 @@
                 TILT_NUM = 5,                   // num. of times image tilt between 2 beats
                 TILT_MAX = Math.PI / 6,
                 TILT_STEP = TILT_MAX * 0.03,
-                MOVE_X_STEP = ww * 0.5,
-                MOVE_Y_STEP = wh * 0.5,
-                IMG_BANK_SIZE = 38,
+                MOVE_X_STEP = ww * 0.4,         // max distance between two consecutive images
+                MOVE_Y_STEP = wh * 0.4,         
+                IMG_BANK_SIZE = 38,             // num. of available images
                 IMG_MAX = 40;                   // num. images displayed at the same time
+                MESH_SIZE = ww / 15;
 
             var ImageMixin = {
                 x: 0,
@@ -188,6 +189,16 @@
                         {x: this.x, y: this.y + rh},
                         {x: this.x, y: this.y - rh}
                     ]
+                    /*var retract = 0.5, vertices = [], x = this.x - retract * this.width / 2, y;
+                    while (x < this.x + retract * this.width / 2 + MESH_SIZE) {
+                        y = this.y - retract * this.height / 2;
+                        while (y < this.y + retract * this.height / 2) {
+                            vertices.push({x: x, y: y});
+                            y += MESH_SIZE;
+                        }
+                        x += MESH_SIZE;
+                    }
+                    return vertices;*/
                 }
 
             };
@@ -248,10 +259,10 @@
                     }
 
                     // Calculate position for the new image
-                    last_position.x += Math.random() * MOVE_X_STEP - MOVE_X_STEP / 2;
+                    last_position.x += Math.random() * MOVE_X_STEP * 2 - MOVE_X_STEP;
                     last_position.x = Math.min(last_position.x, ww - 200);
                     last_position.x = Math.max(last_position.x, 200);
-                    last_position.y += Math.random() * MOVE_Y_STEP - MOVE_Y_STEP / 2;
+                    last_position.y += Math.random() * MOVE_Y_STEP * 2 - MOVE_Y_STEP;
                     last_position.y = Math.min(last_position.y, wh - 100);
                     last_position.y = Math.max(last_position.y, 100);
 
