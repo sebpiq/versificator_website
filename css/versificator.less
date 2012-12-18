@@ -33,6 +33,21 @@ html, body, canvas {
     margin: 0px;
 }
 
+#stop {
+    display: none;
+}
+#play, #stop {
+    position: absolute;
+    height: 40%;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    img { 
+        height: 100%;
+        cursor: pointer;
+    }
+}
+
 #showFooter {
     color: #111;
     cursor: pointer;
@@ -84,6 +99,13 @@ html, body, canvas {
     #about, #credits {
         width: 100%;
         display: none;
+
+        a {
+            color: black;
+            cursor: pointer;
+            text-decoration: none;
+            border-bottom: 1px dotted grey;
+        }
     }
 
     #menu {

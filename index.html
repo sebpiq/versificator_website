@@ -13,7 +13,6 @@
     <body>
         <!-- Facebook like button -->
         <div id="fb-root"></div>
-        <div id="fb-root"></div>
         <script>(function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
           if (d.getElementById(id)) return;
@@ -22,9 +21,14 @@
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
 
-        <audio autoplay="autoplay" src="http://versificator.fm:8000/versificator.ogg"></audio>
+
+        <div id="play"><img src="images/play.png" /></div>
+        <div id="stop"><img src="images/stop.png" /></div>
+        <audio src="http://versificator.fm:8000/versificator.ogg"></audio>
         <!--<button onclick="sketch.noLoop();">stop</button>
         <button onclick="sketch.loop();">start</button>-->
+
+        <!-- Footer -->
         <div id="showFooter">?</div>
         <div id="footer">
             <div id="footerBody">
@@ -33,7 +37,7 @@
                     It is designed to replace electronic musicians.</br>
                     It is way more productive than a human, cheaper, and never gets tired.</br>
                     It can create new music over and over again, never repeating itself, yielding infinite variations of electronic beats.</br>
-                    If you're a developer, you can serve its evil purpose by improving it (github on the right corner).</br>
+                    If you're a developer, you can serve its evil purpose <a href="https://github.com/sebpiq/versificator">by improving it</a>.</br>
                 </div>
                 <div id="credits">CREDITS</div>
             </div>
@@ -60,15 +64,31 @@
         </div>
         <script>
             $(function() {
+                // Stop / play sound and animations
+                $('#play img').click(function() {
+                    $('audio').get(0).play();
+                    sketch.loop();
+                    $('#play').hide();
+                    $('#stop').show();
+                });
+                $('#stop img').click(function() {
+                    $('audio').get(0).pause();
+                    sketch.noLoop();
+                    $('#stop').hide();
+                    $('#play').show();
+                });
+                // Button for showing footer
                 $('#showFooter').hover(function() {
                     $(this).hide();
                     $('#footer').show().addClass('expanded');
                 });
-                $('canvas').mouseover(function() {
+                // Hiding the footer when hovering canvas 
+                $('canvas, #stop, #play').mouseover(function() {
                     $('#footer').hide().removeClass('expanded');
                     $('#footerBody').css({height: 0}).removeClass('expanded');
                     $('#showFooter').show();
                 });
+                // Expanding footer text 
                 $('#showAbout, #showCredits').click(function() {
                     if (!$('#footerBody').hasClass('expanded')) {
                         $('#footerBody').addClass('expanded').animate({height: 100}, 100);
@@ -189,6 +209,7 @@
                     this.background(255);
                     this.setTempo(60);
                     this.stroke(210);
+                    this.noLoop();
                 },
         
                 draw: function() {
