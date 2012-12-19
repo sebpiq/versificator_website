@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset='utf-8'>
         <title>Versificator</title>
         <script src="js/lib/jquery-1.8.3.min.js"></script>
         <script src="js/lib/processing-1.4.1.min.js"></script>
@@ -11,17 +12,6 @@
     </head>
 
     <body>
-        <!-- Facebook like button -->
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-
-
         <div id="play"><img src="images/play.png" /></div>
         <div id="stop"><img src="images/stop.png" /></div>
         <audio src="http://versificator.fm:8000/versificator.ogg"></audio>
@@ -39,7 +29,10 @@
                     It can create new music over and over again, never repeating itself, yielding infinite variations of electronic beats.</br>
                     If you're a developer, you can serve its evil purpose <a href="https://github.com/sebpiq/versificator">by improving it</a>.</br>
                 </div>
-                <div id="credits">CREDITS</div>
+                <div id="credits">
+                    <div><b>Sébastien Piquemal</b> - sound, coding</div>
+                    <div><b>Martina Babišová</b> - visuals</div>
+                </div>
             </div>
             <div id="menu">
                 <ul>
@@ -48,8 +41,7 @@
                 </ul>
                 <div id="socialNetworks">
                     <div id="facebookButton">
-                        <div class="fb-like" data-href="http://versificator.fm" data-send="false"
-                            data-layout="button_count" data-width="450" data-show-faces="false"></div>
+                        <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fversificator.fm&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
                     </div>
                     <div id="twitterButton">
                         <a href="https://twitter.com/share" class="twitter-share-button" data-via="twitterapi" data-lang="en">Tweet</a>
@@ -219,7 +211,7 @@
                     this.size(ww, wh);
                     this.background(255);
                     this.setTempo(60);
-                    this.stroke(210);
+                    this.stroke(225);
                     this.noLoop();
                 },
         
