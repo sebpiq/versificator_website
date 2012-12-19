@@ -19,12 +19,6 @@
     </head>
 
     <body>
-        <div id="play"><img src="images/play.png" /></div>
-        <div id="stop"><img src="images/stop.png" /></div>
-        <audio src="http://versificator.fm:8000/versificator.ogg"></audio>
-        <!--<button onclick="sketch.noLoop();">stop</button>
-        <button onclick="sketch.loop();">start</button>-->
-
         <!-- Facebook like button -->
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
@@ -35,6 +29,13 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
 
+        <!-- audio -->
+        <div id="play"><img src="images/play.png" /></div>
+        <div id="stop"><img src="images/stop.png" /></div>
+        <audio src="http://versificator.fm:8000/versificator.ogg"></audio>
+        <!--<button onclick="sketch.noLoop();">stop</button>
+        <button onclick="sketch.loop();">start</button>-->
+
         <!-- Footer -->
         <div id="showFooter">?</div>
         <div id="footer">
@@ -44,7 +45,7 @@
                     It is designed to replace electronic musicians.</br>
                     It is way more productive than a human, cheaper, and never gets tired.</br>
                     It can create new music over and over again, never repeating itself, yielding infinite variations of electronic beats.</br>
-                    If you're a developer, you can serve its evil purpose <a href="https://github.com/sebpiq/versificator">by improving it</a>.</br>
+                    It is currently under heavy development. If you're a coder, you can serve its evil purpose <a href="https://github.com/sebpiq/versificator">by improving it</a>.</br>
                 </div>
                 <div id="credits">
                     <div><b>Sébastien Piquemal</b> - sound, coding</div>
@@ -73,20 +74,7 @@
             </div>
         </div>
         <script>
-            $(function() {
-                // Stop / play sound and animations
-                $('#play img').click(function() {
-                    $('audio').get(0).play();
-                    sketch.loop();
-                    $('#play').hide();
-                    $('#stop').show();
-                });
-                $('#stop img').click(function() {
-                    $('audio').get(0).pause();
-                    sketch.noLoop();
-                    $('#stop').hide();
-                    $('#play').show();
-                });
+            var setupFooterActions = function() {
                 // Button for showing footer
                 $('#showFooter').hover(function() {
                     $(this).hide();
@@ -114,9 +102,47 @@
                     $('#credits').show();
                     $('#about').hide();
                 });
+            };
+
+            $(function() {
+                // dirty fix for Facebook like button on Firefox :
+                // http://developers.facebook.com/bugs/279938475441241?browse=search_50b83eb234cb08457299951
+                if (navigator.userAgent.match('Firefox')) {
+                    $('#toggleFooter').hide();
+                    $('#footer').show();
+                    $('#menu').css({visibility: 'hidden'});
+                    $('#facebookButton').siblings().css({visibility: 'hidden'});
+                    var checkFbInterval = setInterval(function() {
+                        if ($('#facebookButton iframe').length) {
+                            setTimeout(function() {
+                                $('#footer').hide(); 
+                                $('#toggleFooter').show();
+                                $('#menu').css({visibility: 'visible'});
+                                $('#facebookButton').siblings().css({visibility: 'visible'});
+                                setupFooterActions();
+                            }, 1500);
+                            clearInterval(checkFbInterval);
+                        }
+                    }, 20)
+                } else setupFooterActions();
+
+                // Stop / play sound and animations
+                $('#play img').click(function() {
+                    $('audio').get(0).play();
+                    sketch.loop();
+                    $('#play').hide();
+                    $('#stop').show();
+                });
+                $('#stop img').click(function() {
+                    $('audio').get(0).pause();
+                    sketch.noLoop();
+                    $('#stop').hide();
+                    $('#play').show();
+                });
             });
         </script>
 
+        <!-- Processing stuff -->
         <canvas id="sketch"></canvas>
         <script>
             var getImageUrls = function() {
@@ -293,6 +319,20 @@
                 }
             });
             sketch.setup();
+        </script>
+
+
+        <!-- Google analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-17637518-2']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
         </script>
     </body>
 
