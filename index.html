@@ -32,7 +32,10 @@
         <!-- audio -->
         <div id="play"><img src="images/play.png" /></div>
         <div id="stop"><img src="images/stop.png" /></div>
-        <audio src="http://versificator.fm:8000/versificator.ogg"></audio>
+        <audio>
+            <source src="http://versificator.fm:8000/versificator.ogg" type="audio/ogg" />
+            <source src="http://versificator.fm:8000/versificator.mp3" type="audio/mpeg" />
+        </audio>
         <!--<button onclick="sketch.noLoop();">stop</button>
         <button onclick="sketch.loop();">start</button>-->
 
